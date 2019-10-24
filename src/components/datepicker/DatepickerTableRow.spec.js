@@ -66,7 +66,7 @@ describe('BDatepickerTableRow', () => {
             expect(lastSelectedCell.classes()).toContain('is-last-selected')
         })
 
-        it('should has is-selected class for all range of dates selected', function () {
+        it('should have is-selected class for all range of dates selected', function () {
             expect(wrapper.findAll('.is-selected').length).toBe(5)
         })
 
@@ -191,5 +191,39 @@ describe('BDatepickerTableRow', () => {
         const day = newDate(2019, thisMonth, 6)
         wrapper.vm.setRangeHoverEndDate(day)
         expect(wrapper.emitted()['rangeHoverEndDate']).toBeTruthy()
+    })
+
+    it('should have is-unselectable class for all range of dates selected if disabled is set to true and should have no is-selectable class', function () {
+        wrapper.setProps({disabled: true})
+        expect(wrapper.findAll('.is-selectable').length).toBe(0)
+        expect(wrapper.findAll('.is-unselectable').length).toBe(7)
+    })
+
+    it('should handle list of unselectable days of the week passed to it', () => {
+        wrapper.setProps({unselectableDaysOfWeek: [5, 6]})
+        expect(wrapper.findAll('.is-selectable').length).toBe(5)
+        expect(wrapper.findAll('.is-unselectable').length).toBe(2)
+    })
+
+    it('should handle list of selectable dates passed to it', () => {
+        wrapper.setProps({selectableDates: propsData.week})
+        expect(wrapper.findAll('.is-selectable').length).toBe(7)
+        expect(wrapper.findAll('.is-unselectable').length).toBe(0)
+    })
+
+    it('should handle list of unselectable dates passed to it', () => {
+        wrapper.setProps({unselectableDates: propsData.week})
+        expect(wrapper.findAll('.is-selectable').length).toBe(0)
+        expect(wrapper.findAll('.is-unselectable').length).toBe(7)
+    })
+
+    it('should handle min and max dates passed to it', () => {
+        wrapper.setProps({minDate: propsData.week[0], maxDate: propsData.week[3]})
+        expect(wrapper.findAll('.is-selectable').length).toBe(4)
+        expect(wrapper.findAll('.is-unselectable').length).toBe(3)
+    })
+
+    it('should handle default values for nearbyMonthDays and nearbySelectableMonthDays', () => {
+        wrapper.setProps({nearbyMonthDays: true, nearbySelectableMonthDays: false})
     })
 })
